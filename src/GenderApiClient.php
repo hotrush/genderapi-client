@@ -8,7 +8,7 @@ class GenderApiClient
 {
     const ENDPOINT = 'https://genderapi.io/api/';
     const USER_AGENT = 'GenderApi PHP Client';
-    const VERSION = '0.1.0';
+    const VERSION = '0.1.1';
     const WEBSITE = 'https://github.com/hotrush/genderapi-client';
 
     /**
@@ -42,7 +42,7 @@ class GenderApiClient
         }
 
         return new NameItem(
-            $this->adapter->get('/', $args)
+            $this->adapter->get('', $args)
         );
     }
 
@@ -59,7 +59,7 @@ class GenderApiClient
             $args['country'] = $country;
         }
 
-        $response = $this->adapter->get('/', $args);
+        $response = $this->adapter->get('', $args);
         $names = [];
 
         if (isset($response['names'])) {
@@ -82,7 +82,7 @@ class GenderApiClient
         }
 
         return new NameItem(
-            $this->adapter->get('/email', $args)
+            $this->adapter->get('email', $args)
         );
     }
 }

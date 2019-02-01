@@ -41,7 +41,7 @@ class GuzzleHttpAdapter extends AbstractAdapter
             $endpoint = GenderApiClient::ENDPOINT;
         }
 
-        $config = [
+        $this->client = new Client([
             'base_uri' => $endpoint,
             'headers' => [
                 'Accept' => 'application/json',
@@ -51,15 +51,7 @@ class GuzzleHttpAdapter extends AbstractAdapter
                     GenderApiClient::WEBSITE
                 ),
             ],
-        ];
-
-        if ($this->apiKey) {
-            $config['query'] = [
-                'key' => $this->apiKey,
-            ];
-        }
-
-        $this->client = new Client($config);
+        ]);
     }
 
     /**
@@ -73,23 +65,37 @@ class GuzzleHttpAdapter extends AbstractAdapter
     }
 
     /**
+     * @param array $args
+     * @return array
+     */
+    private function buildQueryArgs(array $args = [])
+    {
+        if ($this->apiKey) {
+            $args['key'] = $this->apiKey;
+        }
+
+        return $args;
+    }
+
+    /**
      * Send GET request.
      *
      * @param $url
      * @param array $args
+     * @return array
      */
     public function get($url, array $args = [])
     {
-        $options = [];
-        if (!empty($args)) {
-            $options['query'] = $args;
-        }
+        $options = [
+            'query' => $this->buildQueryArgs($args),
+        ];
+
         try {
-            $this->handleResponse(
+            return $this->handleResponse(
                 $this->client->get($url, $options)
             );
         } catch (RequestException $e) {
-            return $this->handleError($e);
+            $this->handleError($e);
         }
     }
 }

@@ -13,13 +13,13 @@ abstract class AbstractAdapter implements AdapterInterface
      * Handle Gender API response.
      *
      * @param ResponseInterface $response
-     * @return mixed
+     * @return array
      */
-    protected function handleResponse(ResponseInterface $response)
+    protected function handleResponse(ResponseInterface $response): array
     {
         $responseData = json_decode($response->getBody()->getContents(), true);
 
-        if (!array_key_exists('status', $responseData)) {
+        if (!$responseData || !array_key_exists('status', $responseData)) {
             throw new InvalidResponseException();
         }
         if (!$responseData['status']) {
