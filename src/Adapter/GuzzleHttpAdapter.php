@@ -20,13 +20,20 @@ class GuzzleHttpAdapter extends AbstractAdapter
     protected $apiKey;
 
     /**
+     * @var int
+     */
+    protected $timeout;
+
+    /**
      * GuzzleHttpAdapter constructor.
      *
      * @param null $apiKey
+     * @param int  $timeout
      */
-    public function __construct($apiKey = null)
+    public function __construct($apiKey = null, $timeout = 30)
     {
         $this->apiKey = $apiKey;
+        $this->timeout = (int) $timeout;
         $this->buildClient();
     }
 
@@ -51,6 +58,7 @@ class GuzzleHttpAdapter extends AbstractAdapter
                     GenderApiClient::WEBSITE
                 ),
             ],
+            'timeout' => $this->timeout,
         ]);
     }
 
